@@ -1,0 +1,30 @@
+{
+    "name": "princeh/qiniu-upload",
+    "description": "A Laravel Nova field.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0",
+        "zgldh/qiniu-laravel-storage": "^0.10.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Princeh\\QiniuUpload\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Princeh\\QiniuUpload\\FieldServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
