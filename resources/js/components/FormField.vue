@@ -15,7 +15,7 @@
                    :disabled="isReadonly"
                    @change="fileChange"
             />
-            <span class="text-gray-50 select-none" v-if="hash"> {{ hash }} </span>
+            <span class="text-gray-50 select-none" v-if="key"> {{ key }} </span>
             <p v-if="hasError" class="my-2 text-danger">
                 {{ firstError }}
             </p>
@@ -33,7 +33,7 @@
         mixins: [FormField, HandlesValidationErrors],
         props: ['resourceName', 'resourceId', 'field'],
         data:() => ({
-           file: null, token:'',hash:'', observer : {
+           file: null, token:'',key:null, observer : {
                 next(res){
                     NProgress.set(res.total.percent/100);
                 },
@@ -41,8 +41,7 @@
                     console.log(err)
                 },
                 complete(res){
-                    this.hash = res.hash;
-                    this.$vue.hash = res.hash;
+                    this.$vue.key = res.key;
                     this.$vue.$toasted.show('上传完成!', { position: "top-center", type: 'success' });
                 }
             },subscription:null,observable:null
@@ -52,12 +51,13 @@
                 this.hash = this.field.value || ''
             },
             fill(formData) {
-                formData.append(this.field.attribute, this.hash || '')
+                formData.append(this.field.attribute, this.key || '')
             },
             async upload(){
                 axios.get('/qiniu/upload/key').then(response => {
                     this.token = response.data.token;
                     this.file = this.$refs.QFile.files[0];
+                    console.log(this.file);
                     this.observable = qiniu.upload(this.file, this.file.name,this.token);
                     this.subscription = this.observable.subscribe(this.observer); // 上传开始
                     this.subscription.observer.$vue = this;
